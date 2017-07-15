@@ -7,10 +7,13 @@ from datetime import datetime
 class ParserThemisFirst:
 
 	def __init__(self):
-		self.dados = {}
+		self.dados = {"tipo":"primeira_instancia"}
 		
-	def parse(self,text):
+	def parse(self,dados):
 
+		text = dados["conteudo"]
+		self.dados["endereco"] = dados["endereco"]
+		
 		parser = bf4(text,"html.parser")
 
 		processo = parser.findAll("div",{"class":"div-header"})[0].text.replace(" ","")

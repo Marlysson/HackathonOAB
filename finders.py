@@ -2,19 +2,42 @@
 
 import requests
 from parsers import ParserThemisFirst
+from bs4 import BeautifulSoup as bf4
 
 class FinderThemisFirst:
 
 	URL = 'http://www.tjpi.jus.br/themisconsulta/consulta/solr/parte'
 
+	def __init__(self):
+		self.content = ""
+
 	def find(self,nome):
 		
+		nome = nome.upper()
+
 		dados = { "consulta.nome":nome }
 
 		request = requests.post(FinderThemisFirst.URL,dados)
 		response = request.text
 
-		return response
+		self.content = response
+
+		return {"conteudo":response,"endereco":request.url}
+
+	def is_parseable(self):
+
+		#Verifique se o processo retornado é da mesma pessoa pesquisada
+		#Se tiver mais de uma div, então mais de uma pessoa encontra,
+		#Então você pesquisa não era exato.
+
+		#TO-DO: Verifique se todo o processo retornado contém a pessoa procurada
+		
+		parser = bf4(self.content,"html.parser")
+		content = parser.findAll("div",{"id":"processos"})
+
+		if len(content):
+			return False
+		return True
 
 class FinderThemisSecond:
 
@@ -29,7 +52,7 @@ class FinderThemisSecond:
 		request = requests.post(FinderThemisSecond.URL,dados)
 		response = request.text
 
-		return response
+		return {"conteudo":response,"endereco":request.url}
 
 class FinderDiarioOficial:
 
@@ -39,9 +62,13 @@ class FinderDiarioOficial:
 if __name__ == "__main__":
 
 	finder = FinderThemisFirst()
-	dados = finder.find("maria luiza nascimento de araújo")
+	dados = finder.find("MARIA LUIZA NASCIMENTO")
 
-	parser = ParserThemisFirst()
-	dados = parser.parse(dados)
-	
-	print(dados)
+	if finder.is_parseable():
+		
+		parser = ParserThemisFirst()
+		dados = parser.parse(dados)
+		print(dados)
+
+	else:
+		print("Sua busca não foi exata.Utilize outra informação")
