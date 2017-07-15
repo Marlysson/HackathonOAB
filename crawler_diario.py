@@ -40,7 +40,8 @@ def return_text(arquivo):
 
     for num in range(reader.numPages):
 
-        texto = tratar_texto(reader.getPage(num).extractText())
+        # texto = tratar_texto(reader.getPage(num).extractText())
+        texto = reader.getPage(num).extractText()
         conteudos.append(texto)
 
     return " ".join(conteudos)
@@ -62,5 +63,8 @@ def parsear_pdf(arquivo):
         with open("parseados/"+nome+".txt","w") as file2:
             file2.write(texto)
         
+
+link = obter_link_diario()
+gravar(link)
 
 parsear_pdf("pdfs/dj170714_8248.pdf")
