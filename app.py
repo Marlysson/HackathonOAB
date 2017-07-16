@@ -12,10 +12,10 @@ app = Flask(__name__)
 def cadastrar():
     return render_template("cadastro.html")    
 
-@app.route('/pesquisar',methods=["POST"])
+@app.route('/pesquisar',methods=["GET"])
 def buscar():
 
-    dado = request.form.get("nome")
+    dado = request.args.get("nome")
     
     finder = FinderThemisFirst()
     dados = finder.find(dado)
