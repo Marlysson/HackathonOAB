@@ -2,6 +2,7 @@
 
 from bs4 import BeautifulSoup as bf4
 import re
+import os
 from datetime import datetime
 
 class ParserThemisFirst:
@@ -72,9 +73,11 @@ class ParserThemisSecond:
 
 class ParserDiarioOficial:
 
+	def __init__(self):
+		self.dir = "pdfs"
+
 	def parse(self,text):
 		pass
-
 
 class ParserJusBrasil:
 

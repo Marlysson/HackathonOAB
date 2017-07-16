@@ -23,7 +23,6 @@ class CapturarLink:
         instancia.__init__(link)
 
         self.next_pipe = instancia
-
         self.next_pipe.run()
 
 class SalvarDiario:
@@ -46,7 +45,8 @@ class SalvarDiario:
         with open(completo,"wb") as arquivo:
             arquivo.write(conteudo)
 
-        instancia = object.__new__(ConverterEmTexto)
+
+        instancia = object.__new__(ConverterEmTexto)        
         instancia.__init__(nome)
 
         self.next_pipe = instancia
@@ -55,8 +55,7 @@ class SalvarDiario:
 class ConverterEmTexto:
 
     def __init__(self,arquivo_disco,next_pipe=None):
-        self.arquivo_disco = arquivo_disco
-        self.caminho_arquivo = os.path.join("pdfs",self.arquivo_disco)
+        self.caminho_arquivo = os.path.join("pdfs",arquivo_disco)
         self.next_pipe = next_pipe
 
     def tratar_texto(self,texto):
@@ -72,25 +71,25 @@ class ConverterEmTexto:
         for num in range(reader.numPages):
 
             texto = reader.getPage(num).extractText()
-            conteudos.append(texto)
+            conteudos.append(texto.encode("utf-8"))
 
         instancia = object.__new__(GravarConvertido)
-        instancia.__init__(self.arquivo_disco," ".join(conteudos))
+        instancia.__init__(self.caminho_arquivo," ".join(conteudos))
 
         self.next_pipe = instancia
         self.next_pipe.run()
-
+            
 class GravarConvertido:
 
-    def __init__(self,arquivo_disco,texto,next_pipe=None):
+    def __init__(self, arquivo_disco, texto, next_pipe=None):
         self.arquivo_disco = arquivo_disco
         self.texto = texto
         self.dir_parseados = "parseados/"
 
     def run(self):
-
-        nome,extensao = os.path.splitext(self.arquivo_disco)
-        nome = nome+".txt"
+        
+        nome,extensao = os.path.splitext(os.path.basename(self.arquivo_disco))
+        nome = nome + ".txt"
 
         diretorio = os.path.join(self.dir_parseados,nome)
 
@@ -104,7 +103,7 @@ class Pipeline:
 
     def pipe(self,pipe):
     
-        if len(self.pipes):
+        if len(self.pipes) :
             
             atual = self.pipes[-1]
             atual.next_pipe = pipe
@@ -124,4 +123,5 @@ if __name__ == '__main__':
     pipeline.pipe(SalvarDiario)
     pipeline.pipe(ConverterEmTexto)
     pipeline.pipe(GravarConvertido)
+
     pipeline.run()
