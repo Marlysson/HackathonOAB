@@ -59,23 +59,20 @@ class FinderThemisSecond:
 class FinderDiarioOficial:
 
     def find(self,**kwargs):
-        arquivos = os.listdir("pdfs")
+        pass
 
-        for arquivo in arquivos:
-            pass
+# if __name__ == "__main__":
 
-if __name__ == "__main__":
+#     finder = FinderThemisFirst()
+#     dados = finder.find("bRUNO DARSHAN")
 
-    finder = FinderThemisFirst()
-    dados = finder.find("bRUNO DARSHAN")
-
-    if finder.is_parseable():
+#     if finder.is_parseable():
         
-      parser = ParserThemisFirst()
-      dados = parser.parse(dados)
+#       parser = ParserThemisFirst()
+#       dados = parser.parse(dados)
 
-      print(dados)
+#       print(dados)
 
-    else:
+#     else:
 
-      print("Sua busca não foi exata.Utilize outra informação")
+#       print("Sua busca não foi exata.Utilize outra informação")

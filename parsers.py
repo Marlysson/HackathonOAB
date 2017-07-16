@@ -73,9 +73,6 @@ class ParserThemisSecond:
 
 class ParserDiarioOficial:
 
-	def __init__(self):
-		self.dir = "pdfs"
-
 	def parse(self,text):
 		pass
 
